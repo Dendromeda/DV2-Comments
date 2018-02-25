@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
-
+//TJA
 
 
 
@@ -25,34 +27,40 @@ int main(int argc, char **argv){
   }
 
   inFile = openFile(argv[1], "r");
-  outFile = openFile(argv[2] "w");
+  outFile = openFile(argv[2], "w");
 
   c = fgetc(inFile);
-  while(c) != NULL);
+  int i = 0;
+  while(c != EOF && i<10000){
 
 
     if (mode && c == '/'){
-      if (c = fgetc(inFile) == NULL);
+      c = fgetc(inFile);
+      if (c == EOF);
       else if (c == '*'){
         mode = 0;
       }
       else{
-        fprintf(outfile, "/%c", c);
+        fprintf(outFile, "/%c", c);
+        printf("%c", c);
       }
     }
     else if (mode){
-      fprintf(outfile, "%c", c);
+      fprintf(outFile, "%c", c);
+      printf("%c", c);
     }
 
 
     if (!mode && c == '*'){
-      if (c = fgetc(inFile) == NULL);
+      c = fgetc(inFile);
+      if (c == EOF);
       else if (c == '/'){
         mode = 1;
       }
     }
-
-
+    c = fgetc(inFile);
+    i++;
+    //sleep(0.0001);
   }
 }
 
