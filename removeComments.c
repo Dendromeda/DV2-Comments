@@ -16,13 +16,12 @@ FILE *openFile(char *file, char *mode);
 
 int main(int argc, char **argv){
   bool mode = 1;
-  bool alert = 0;
   char c;
   FILE *inFile;
   FILE *outFile;
 
   if (argc != 3){
-    printf("Usage: removeComments *input file* *output file*\n");
+    printf("USAGE: \nremoveComments [INPUT FILE] [OUTPUT FILE]\n");
     exit(1);
   }
 
@@ -30,10 +29,7 @@ int main(int argc, char **argv){
   outFile = openFile(argv[2], "w");
 
   c = fgetc(inFile);
-  int i = 0;
-  while(c != EOF && i<10000){
-
-
+  while(c != EOF){
     if (mode && c == '/'){
       c = fgetc(inFile);
       if (c == EOF);
@@ -41,17 +37,15 @@ int main(int argc, char **argv){
         mode = 0;
       }
       else{
-        fprintf(outFile, "/%c", c);
+        fputc(c, outFile);
         printf("%c", c);
       }
     }
     else if (mode){
-      fprintf(outFile, "%c", c);
+      fputc(c, outFile);
       printf("%c", c);
     }
-
-
-    if (!mode && c == '*'){
+    else if (!mode && c == '*'){
       c = fgetc(inFile);
       if (c == EOF);
       else if (c == '/'){
@@ -59,9 +53,9 @@ int main(int argc, char **argv){
       }
     }
     c = fgetc(inFile);
-    i++;
-    //sleep(0.0001);
   }
+  fclose(inFile);
+  fclose(outFile);
 }
 
 FILE *openFile(char *file, char *mode){
