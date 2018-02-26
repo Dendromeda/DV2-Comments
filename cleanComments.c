@@ -2,64 +2,66 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-//TJA
-
-
-
-
-
-
-
-
 
 FILE *openFile(char *file, char *mode);
 
 int main(int argc, char **argv){
-  bool mode = 1;
-  char c1;
-  char c2;
-  FILE *inFile;
-  FILE *outFile;
+	int state = 1;
+	char c;
+	FILE *inFile;
+	FILE *outFile;
 
-  if (argc != 3){
-    printf("USAGE: \ncleanComments [INPUT FILE] [OUTPUT FILE]\n");
-    exit(1);
-  }
+	if (argc != 3){
+		printf("USAGE: \ncleanComments [INPUT FILE] [OUTPUT FILE]\n");
+		exit(1);
+ 	}
 
-  inFile = openFile(argv[1], "r");
-  outFile = openFile(argv[2], "w");
+	inFile = openFile(argv[1], "r");
+	outFile = openFile(argv[2], "w");
+	c = fgetc(inFile);
+	while(c != EOF){
+		switch(state) {
+			case 1:
+				if(c == '/') {
+					state = 2;
+				} else {
+					fputc(c, outFile);
+				}
+				break;
+			case 2:
+				if(c == '*') {
+					state = 3;
+				} else {
+					state = 1;
+					fputc('/', outFile);
+					fputc(c, outFile);
+				}
+				break;
+			case 3:
+				if(c == '*') {
+					state = 4;
+				}
+				break;
+			case 4:
+				if(c == '/') {
+					state = 1;
+				} else {
+					state = 3;
+				}
+				break;
+		}
+		c = fgetc(inFile);
+	}
 
-  c1 = fgetc(inFile);
-  while(c1 != EOF){
-    c2 = fgetc(inFile);
-
-    if (mode){
-      if (c1 == '/' && c2 =='*'){
-        mode = 0;
-      }
-      else {
-        fputc(c1, inFile);
-        printf("%c", c1);
-      }
-    }
-
-    if (!mode){
-      if (c1 == '*' && c2 == '/'){
-        mode = 1;
-        c2 = fgetc(inFile);
-      }
-    }
-    c1 = c2;
-  }
-  fclose(inFile);
-  fclose(outFile);
+	fclose(inFile);
+	fclose(outFile);
 }
 
 FILE *openFile(char *file, char *mode){
 	FILE *fp = fopen(file, mode);
 	if(fp == NULL) {
 		fprintf(stderr, "Couldn't open input file %s\n", file);
-		exit(0);
+		exit(2);
 	}
 	return fp;
 }
