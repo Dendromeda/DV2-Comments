@@ -22,7 +22,7 @@ int main(int argc, char **argv){
   FILE *outFile;
 
   if (argc != 3){
-    printf("USAGE: \nremoveComments [INPUT FILE] [OUTPUT FILE]\n");
+    printf("USAGE: \ncleanComments [INPUT FILE] [OUTPUT FILE]\n");
     exit(1);
   }
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv){
   c1 = fgetc(inFile);
   while(c1 != EOF){
     c2 = fgetc(inFile);
-    
+
     if (mode){
       if (c1 == '/' && c2 =='*'){
         mode = 0;
@@ -42,6 +42,7 @@ int main(int argc, char **argv){
         printf("%c", c1);
       }
     }
+
     if (!mode){
       if (c1 == '*' && c2 == '/'){
         mode = 1;

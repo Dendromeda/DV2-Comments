@@ -2,13 +2,14 @@ CC = gcc -std=c99
 CFLAGS = -g -fno-omit-frame-pointer -Wall -Wextra
 
 .PHONY: all
-all: removeComments
-removeComments: removeComments.o
-	$(CC) $(CFLAGS) -o $@ removeComments.o
+all: cleanComments
 
-removeComments.o: removeComments.c
-	$(CC) $(CFLAGS) -c removeComments.c
+cleanComments: cleanComments.o
+	$(CC) $(CFLAGS) -o $@ cleanComments.o
+
+cleanComments.o: cleanComments.c
+	$(CC) $(CFLAGS) -c cleanComments.c
 
 .PHONY: clean
 clean:
-	rm -fv *.o removeComments
+	rm -fv *.o cleanComments
