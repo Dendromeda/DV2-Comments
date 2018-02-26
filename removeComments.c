@@ -16,7 +16,8 @@ FILE *openFile(char *file, char *mode);
 
 int main(int argc, char **argv){
   bool mode = 1;
-  char c;
+  char c1;
+  char c2;
   FILE *inFile;
   FILE *outFile;
 
@@ -28,31 +29,26 @@ int main(int argc, char **argv){
   inFile = openFile(argv[1], "r");
   outFile = openFile(argv[2], "w");
 
-  c = fgetc(inFile);
-  while(c != EOF){
-    if (mode && c == '/'){
-      c = fgetc(inFile);
-      if (c == EOF);
-      else if (c == '*'){
+  c1 = fgetc(inFile);
+  while(c1 != EOF){
+    c2 = fgetc(inFile);
+    
+    if (mode){
+      if (c1 == '/' && c2 =='*'){
         mode = 0;
       }
-      else{
-        fputc(c, outFile);
-        printf("%c", c);
+      else {
+        fputc(c1, inFile);
+        printf("%c", c1);
       }
     }
-    else if (mode){
-      fputc(c, outFile);
-      printf("%c", c);
-    }
-    else if (!mode && c == '*'){
-      c = fgetc(inFile);
-      if (c == EOF);
-      else if (c == '/'){
+    if (!mode){
+      if (c1 == '*' && c2 == '/'){
         mode = 1;
+        c2 = fgetc(inFile);
       }
     }
-    c = fgetc(inFile);
+    c1 = c2;
   }
   fclose(inFile);
   fclose(outFile);
