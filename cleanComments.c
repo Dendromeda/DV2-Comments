@@ -32,10 +32,14 @@ int main(int argc, char **argv){
 
 	inFile = openFile(argv[1], "r");
 	outFile = openFile(argv[2], "w");
+
 	c = fgetc(inFile);
 	while(c != EOF){
 		switch(state) {
-			//
+				/* State 1:
+			  	 * Checks if the character is a '/', if true it goes to state 2.
+			   	 * Otherwise it writes the character to the output file.
+				*/
 			case 1:
 				if(c == '/') {
 					state = 2;
@@ -43,7 +47,11 @@ int main(int argc, char **argv){
 					fputc(c, outFile);
 				}
 				break;
-			//
+				/* State 2:
+				 * Checks if the character is a '*', if true it goes to state 3.
+				 * Otherwise it goes back to state 1 and writes a '/' character
+				 * and the read character to the output file.
+				*/
 			case 2:
 				if(c == '*') {
 					state = 3;
@@ -53,13 +61,19 @@ int main(int argc, char **argv){
 					fputc(c, outFile);
 				}
 				break;
-			//
+				/* State 3:
+				 * Checks if the character is a '*', if true it goes to state 4.
+				 * Otherwise it stays in state 3.
+				*/
 			case 3:
 				if(c == '*') {
 					state = 4;
 				}
 				break;
-			//
+				/* State 4:
+				 * Checks if the character is a '/', if true it goes to state 1.
+				 * Otherwise it goes back to state 3.
+				*/
 			case 4:
 				if(c == '/') {
 					state = 1;
